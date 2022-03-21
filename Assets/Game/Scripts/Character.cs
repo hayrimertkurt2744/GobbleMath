@@ -12,4 +12,10 @@ public class Character : MonoBehaviour
         None
     }
     public CharacterID currentCharacterID = CharacterID.None;
+    public int spoonSize=1;
+    public Material currentMaterial;
+    private void Start()
+    {
+        currentMaterial = GetComponentInChildren<MeshRenderer>().material;
+    }
 }
