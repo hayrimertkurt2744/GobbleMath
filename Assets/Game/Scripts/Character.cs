@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public enum CharacterID
     {
-        
+        Player,
+        Stack,
+        Boss,
+        None
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public CharacterID currentCharacterID = CharacterID.None;
 }

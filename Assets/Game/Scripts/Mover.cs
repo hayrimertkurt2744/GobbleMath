@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class Mover : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void MoveTo(Vector3 targetDir)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        targetDir += transform.localPosition;
+        targetDir.x = Mathf.Clamp(targetDir.x, GameManager.MIN_X, GameManager.MAX_X);
+        transform.position = targetDir;
     }
 }

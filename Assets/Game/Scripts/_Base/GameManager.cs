@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour
         Victory,
         Pause
     }
+    //Max and min values on x axis to restrict the character. 
+    public const float MAX_X =  4.25f;
+    public const float MIN_X = -4.25f;
 
     [Header("Template Settings")]
     [SerializeField] private bool isDebug = true;
@@ -49,6 +52,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Game Settings")]
     public GameState currentState = GameState.BeforeStart;
+    public float horizontalSpeed = 20f;
+    public float forwardSpeed = 5f;
+
 
     private void Awake()
     {
