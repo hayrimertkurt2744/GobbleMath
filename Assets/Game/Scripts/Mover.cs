@@ -8,6 +8,7 @@ public class Mover : MonoBehaviour
     {
         targetDir += transform.localPosition;
         targetDir.x = Mathf.Clamp(targetDir.x, GameManager.MIN_X, GameManager.MAX_X);
-        transform.position = targetDir;
+        //transform.position = targetDir;
+        transform.position = Vector3.Lerp(transform.position, targetDir, GameManager.Instance.playerSmooth * Time.deltaTime);
     }
 }
