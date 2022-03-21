@@ -43,5 +43,9 @@ public class PlayerController : MonoBehaviour
         }
        
     }
-    
+    private void OnTriggerEnter(Collider other)
+    {
+        print(other.GetComponent<MeshRenderer>().material.name);
+    }
+
 }
