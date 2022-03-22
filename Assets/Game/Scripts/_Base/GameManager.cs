@@ -56,6 +56,10 @@ public class GameManager : MonoBehaviour
     public float horizontalSpeed = 20f;
     public float forwardSpeed = 1f;
     public float playerSmooth=8f;
+    public int globalCollectedStack = 0;
+
+    [Header("Game Object")]
+    public GameObject stackSpoon;
 
 
     private void Awake()

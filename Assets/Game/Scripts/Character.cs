@@ -17,5 +17,6 @@ public class Character : MonoBehaviour
     private void Start()
     {
         currentMaterial = GetComponentInChildren<MeshRenderer>().material;
+       
     }
 }

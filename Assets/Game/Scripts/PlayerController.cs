@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private GameObject stackSpoon;
+    private int globalCollectedStack;
+
     // Start is called before the first frame update
     void Start()
     {   //when touch the finger or move the finger on the screen,these are not the same action.
         InputManager.Instance.onTouchStart += ProcessPlayerSwerve;
         InputManager.Instance.onTouchMove += ProcessPlayerSwerve;
+        stackSpoon = GameManager.Instance.stackSpoon;
+        
+
 
     }
     private void OnDisable()
@@ -44,8 +50,34 @@ public class PlayerController : MonoBehaviour
        
     }
     private void OnTriggerEnter(Collider other)
-    {
-        print(other.GetComponent<MeshRenderer>().material.name);
+    {   //Collect
+        //print(other.GetComponent<MeshRenderer>().material.name);
+        if (GameManager.Instance.currentState == GameManager.GameState.Normal )
+        {
+            OnCollect(other);
+            
+        }
     }
+    private void OnCollect(Collider other)
+    {
+        
 
+        if ( other.GetComponent<Collectable>() != null && other.GetComponent<Character>().currentCharacterID==Character.CharacterID.Stack)
+        {
+            if (other.GetComponent<Collectable>() != null && other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Stack && globalCollectedStack == 0)
+            {
+                stackSpoon.SetActive(true);
+                GameManager.Instance.globalCollectedStack += 1;
+                print(GameManager.Instance.globalCollectedStack);
+            }
+            else if(other.GetComponent<Collectable>() != null && other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Stack)
+            {
+                GameManager.Instance.globalCollectedStack += 1;
+                print(GameManager.Instance.globalCollectedStack);
+
+
+            }
+        }
+    }
+  
 }
