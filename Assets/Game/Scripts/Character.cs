@@ -9,6 +9,7 @@ public class Character : MonoBehaviour
         Player,
         Stack,
         Boss,
+        Obstacle,
         None
     }
     public CharacterID currentCharacterID = CharacterID.None;

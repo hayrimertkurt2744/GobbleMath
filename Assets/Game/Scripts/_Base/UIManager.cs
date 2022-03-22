@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI fpsText;
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI praiseText;
+    [SerializeField] private TextMeshProUGUI stackCountText;
     [Header("Praise Settings")]
     [SerializeField] private string[] praiseWords;
     [Header("Sliders")]
@@ -44,6 +45,7 @@ public class UIManager : MonoBehaviour
         GameManager.onLoseEvent += ExecuteOnLose;
         LevelManager.onNewLevelLoaded += ForceToClose;
         InputManager.Instance.onTouchStart += CloseTheMenu;
+        GameManager.Instance.onStackTake += onNewStackTake;
     }
 
     private void OnDisable()
@@ -53,6 +55,7 @@ public class UIManager : MonoBehaviour
         LevelManager.onNewLevelLoaded -= UpdateLevelText;
         LevelManager.onNewLevelLoaded -= ForceToClose;
         InputManager.Instance.onTouchStart -= CloseTheMenu;
+        GameManager.Instance.onStackTake -= onNewStackTake;
     }
 
     public void SetProgresBarMaxValue(float maxValue)
@@ -203,5 +206,9 @@ public class UIManager : MonoBehaviour
     {
         GameManager.Instance.currentState = GameManager.GameState.Failed;
         onLoseUI?.Invoke();
+    }
+    private void onNewStackTake(int amount)
+    {
+        stackCountText.text = amount.ToString();
     }
 }

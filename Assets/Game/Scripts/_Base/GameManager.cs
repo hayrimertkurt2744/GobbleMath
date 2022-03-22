@@ -58,6 +58,8 @@ public class GameManager : MonoBehaviour
     public float playerSmooth=8f;
     public int globalCollectedStack = 0;
 
+    public Action<int> onStackTake; 
+
     [Header("Game Object")]
     public GameObject stackSpoon;
 

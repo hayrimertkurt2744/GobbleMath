@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private GameObject stackSpoon;
-    private int globalCollectedStack;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -55,29 +55,57 @@ public class PlayerController : MonoBehaviour
         if (GameManager.Instance.currentState == GameManager.GameState.Normal )
         {
             OnCollect(other);
+            OnCollisionWithObstacle(other);
             
         }
     }
     private void OnCollect(Collider other)
     {
-        
-
         if ( other.GetComponent<Collectable>() != null && other.GetComponent<Character>().currentCharacterID==Character.CharacterID.Stack)
         {
-            if (other.GetComponent<Collectable>() != null && other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Stack && globalCollectedStack == 0)
-            {
+            if (other.GetComponent<Collectable>() != null && other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Stack && GameManager.Instance.globalCollectedStack == 0)
+            {   //toplama animasyonu/sesi ekle
                 stackSpoon.SetActive(true);
+                Destroy(other.gameObject);
                 GameManager.Instance.globalCollectedStack += 1;
                 print(GameManager.Instance.globalCollectedStack);
             }
             else if(other.GetComponent<Collectable>() != null && other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Stack)
-            {
-                GameManager.Instance.globalCollectedStack += 1;
+            {   //artýþa animasyonu/sesi ekle
+                Destroy(other.gameObject);
+                //stackSpoon.transform.localScale.
                 print(GameManager.Instance.globalCollectedStack);
+                GameManager.Instance.globalCollectedStack += 1;
+                GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
 
 
             }
         }
+    }
+    private void OnCollisionWithObstacle(Collider other)
+    {   //engele çarpýp saçýlma ses/animasyonu ekle
+       
+        if (GameManager.Instance.globalCollectedStack == 1 && other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Obstacle)
+        {
+            gameObject.GetComponent<Rigidbody>().AddForce(-10, -10, -10, ForceMode.Impulse);
+            stackSpoon.SetActive(false);
+            GameManager.Instance.globalCollectedStack--;
+            GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
+            
+        }
+        else if (GameManager.Instance.globalCollectedStack == 0 && other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Obstacle)
+        {
+            gameObject.GetComponent<Rigidbody>().AddForce(-10, -10, -10, ForceMode.Impulse);
+            GameManager.Instance.currentState = GameManager.GameState.Failed;
+
+        }
+        else if(other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Obstacle)
+        {
+            gameObject.GetComponent<Rigidbody>().AddForce(-10, -10, -10, ForceMode.Impulse);
+            GameManager.Instance.globalCollectedStack -= 1;
+            GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
+        }  
+
     }
   
 }
