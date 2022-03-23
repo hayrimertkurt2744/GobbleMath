@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
     public GameObject stackSpoon;
     public GameObject[] stackList;
     private int currentStackListNumber=0;
-    private bool isPlayerHasLastChance=false;
+    private bool isPlayerPushed=false;
     
 
     // Start is called before the first frame update
@@ -29,6 +29,14 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         ProcessPlayerMovement();
+    }
+    private void FixedUpdate()
+    {
+        if (isPlayerPushed==true)
+        {
+            gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, -5), ForceMode.Impulse);
+            isPlayerPushed = false;
+        }
     }
 
     private void ProcessPlayerMovement()
@@ -101,42 +109,58 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionWithObstacle(Collider other)
     {   //engele çarpýp saçýlma ses/animasyonu ekle
        
-        if (other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Obstacle&& currentStackListNumber==0)
+        if (other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Obstacle && currentStackListNumber==0 && GameManager.Instance.globalCollectedStack == 1)
         {
             //gameObject.GetComponent<Rigidbody>().AddForce(-10, -10, -10, ForceMode.Impulse);
+
             stackList[currentStackListNumber].SetActive(false); 
 
             GameManager.Instance.globalCollectedStack--;
             GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
+            isPlayerPushed = true;
 
-            isPlayerHasLastChance = true;
+
             print(GameManager.Instance.globalCollectedStack);
 
         }
-        else if (other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Obstacle && isPlayerHasLastChance == true)
-        {//gameover,fail animation
-            gameObject.GetComponent<Rigidbody>().AddForce(-10, -10, -10, ForceMode.Impulse);
-            GameManager.Instance.currentState = GameManager.GameState.Failed;
-            print("you failed");
-            print(GameManager.Instance.globalCollectedStack);
-
-        }
-        else if(other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Obstacle && currentStackListNumber>0)
+        else if(other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Obstacle && currentStackListNumber != 0 && GameManager.Instance.globalCollectedStack>1)
         {
-            isPlayerHasLastChance = false;
+            
             gameObject.GetComponent<Rigidbody>().AddForce(-10, -10, -10, ForceMode.Impulse);
 
             stackList[currentStackListNumber - 1].SetActive(true);
             stackList[currentStackListNumber].SetActive(false);
             currentStackListNumber--;
 
-            GameManager.Instance.globalCollectedStack -= 1;
+            GameManager.Instance.globalCollectedStack--;
             GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
+            isPlayerPushed = true;
 
             print(GameManager.Instance.globalCollectedStack);
-        }  
+        }
+        else if(other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Obstacle && currentStackListNumber == 0 && GameManager.Instance.globalCollectedStack>1)
+        {
+            //gameObject.GetComponent<Rigidbody>().AddForce(-10, -10, -10, ForceMode.Impulse);
+            GameManager.Instance.globalCollectedStack--;
+            GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
+            isPlayerPushed = true;
+
+            print(GameManager.Instance.globalCollectedStack);
+
+        }
+        else if (other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Obstacle &&  GameManager.Instance.globalCollectedStack == 0)
+        {
+            //gameObject.GetComponent<Rigidbody>().AddForce(-10, -10, -10, ForceMode.Impulse);
+            print("you failed");
+            GameManager.Instance.currentState = GameManager.GameState.Failed;
+            print(GameManager.Instance.currentState);
+            isPlayerPushed = true;
+
+        }
+
 
     }
+
     private void OnCollisionWithGate(Collider other)
     {
 

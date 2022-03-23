@@ -4,5 +4,12 @@ using UnityEngine;
 
 public class GateMechanics : MonoBehaviour
 {
-   //plus minus gates
+    
+
+    private void Start()
+    {
+        
+       
+    }
+
 }
