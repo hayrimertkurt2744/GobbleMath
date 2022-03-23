@@ -13,11 +13,25 @@ public class Character : MonoBehaviour
         None
     }
     public CharacterID currentCharacterID = CharacterID.None;
-    public int spoonSize=1;
+    public int spoonSize;
     public Material currentMaterial;
+    private PlayerController playerController;
+
+    
+
     private void Start()
     {
         currentMaterial = GetComponentInChildren<MeshRenderer>().material;
+        GameManager.Instance.onStackTake += OnNewStackTake;
        
+    }
+    private void OnDisable()
+    {
+        GameManager.Instance.onStackTake -= OnNewStackTake;
+    }
+
+    private void OnNewStackTake(int amount)
+    {
+      
     }
 }
