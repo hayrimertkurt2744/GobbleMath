@@ -358,6 +358,7 @@ GameObject:
   - component: {fileID: 340475891}
   - component: {fileID: 340475890}
   - component: {fileID: 340475889}
+  - component: {fileID: 340475894}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -454,6 +455,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &340475894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 340475888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01caa2f3fe0fe124e89bb82918a99263, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &342024496 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8337931864860954622, guid: 37abe72c8698c694994d16de30536a02,
@@ -1150,8 +1163,8 @@ GameObject:
   - component: {fileID: 1225741606}
   - component: {fileID: 1225741605}
   - component: {fileID: 1225741604}
-  - component: {fileID: 1225741603}
   - component: {fileID: 1225741607}
+  - component: {fileID: 1225741603}
   m_Layer: 0
   m_Name: gate
   m_TagString: Untagged
@@ -2288,7 +2301,7 @@ PrefabInstance:
     - target: {fileID: 8337931864860954622, guid: 37abe72c8698c694994d16de30536a02,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.4
+      value: -3.5
       objectReference: {fileID: 0}
     - target: {fileID: 8337931864860954622, guid: 37abe72c8698c694994d16de30536a02,
         type: 3}
