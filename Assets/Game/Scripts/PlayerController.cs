@@ -6,8 +6,12 @@ public class PlayerController : MonoBehaviour
 {
     public GameObject stackSpoon;
     public GameObject[] stackList;
+    public ParticleSystem[] particleList;
+    private int collectParticleIndex=0;
+    private int loseParticleIndex=1;
     private int currentStackListNumber=0;
     private bool isPlayerPushed=false;
+
     
 
     // Start is called before the first frame update
@@ -77,6 +81,8 @@ public class PlayerController : MonoBehaviour
                 stackList[currentStackListNumber].SetActive(true);
                 Destroy(other.gameObject);
 
+                OnParticlePlay(collectParticleIndex);
+
                 GameManager.Instance.globalCollectedStack += 1;
                 print(GameManager.Instance.globalCollectedStack);
             }
@@ -87,7 +93,7 @@ public class PlayerController : MonoBehaviour
                 stackList[currentStackListNumber+1].SetActive(true);
                 stackList[currentStackListNumber].SetActive(false);
                 currentStackListNumber++;
-
+                OnParticlePlay(collectParticleIndex);
                 //stackSpoon.transform.localScale.
 
                 GameManager.Instance.globalCollectedStack += 1;
@@ -99,6 +105,7 @@ public class PlayerController : MonoBehaviour
             {
                 Destroy(other.gameObject);
                 GameManager.Instance.globalCollectedStack += 1;
+                OnParticlePlay(collectParticleIndex);
 
                 print(GameManager.Instance.globalCollectedStack);
                 GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
@@ -160,7 +167,10 @@ public class PlayerController : MonoBehaviour
 
 
     }
-
+    private void OnParticlePlay(int particleIndex)
+    {
+        particleList[particleIndex].Play();
+    }
     private void OnCollisionWithGate(Collider other)
     {
 

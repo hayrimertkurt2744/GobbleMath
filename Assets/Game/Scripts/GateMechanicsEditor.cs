@@ -7,24 +7,31 @@ public class GateMechanicsEditor : MonoBehaviour
 {
     [Header("Gate Settings")]
     [SerializeField] private bool isNegative;
-    [SerializeField] private int gateNumber=10;
+    [SerializeField] private int gateNumber;
     public TextMeshPro gateText;
     public ParticleSystem[] particleSystems;
     private Character character;
     private int negativeIndex=1;
     private int positiveIndex=0;
+   
     // Start is called before the first frame update
     void Start()
     {
-       // gateText = GetComponent<TextMeshPro>();
-        if (isNegative==true && gameObject.GetComponent<Character>().currentCharacterID==Character.CharacterID.Gate)
+        GatePreparing();
+    }
+
+    private void GatePreparing()
+    {
+        // gateText = GetComponent<TextMeshPro>();
+        if (isNegative == true && gameObject.GetComponent<Character>().currentCharacterID == Character.CharacterID.Gate)
         {
             particleSystems[negativeIndex].Play();
             particleSystems[positiveIndex].Stop();
             gateNumber *= -1;
             gateText.text = gateNumber.ToString();
+
         }
-        else if(isNegative == false && gameObject.GetComponent<Character>().currentCharacterID == Character.CharacterID.Gate)
+        else if (isNegative == false && gameObject.GetComponent<Character>().currentCharacterID == Character.CharacterID.Gate)
         {
             particleSystems[positiveIndex].Play();
             particleSystems[negativeIndex].Stop();
