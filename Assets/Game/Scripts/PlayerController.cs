@@ -53,8 +53,8 @@ public class PlayerController : MonoBehaviour
         //clamp makes move to method to restrict player in a range.
         if (GameManager.Instance.currentState==GameManager.GameState.Normal)
         {//the all movement happen here.
-           GetComponent<Mover>().MoveTo(new Vector3(
-             InputManager.Instance.GetDirection().x * GameManager.Instance.horizontalSpeed,0f,0f));
+           GetComponent<Mover>().MoveTo(new 
+               Vector3(-InputManager.Instance.GetDirection().x * GameManager.Instance.horizontalSpeed,0f,0f));
         }
        
     }
