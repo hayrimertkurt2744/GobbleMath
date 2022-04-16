@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     public GameObject[] stackList;
     public ParticleSystem[] particleList;
     private int collectParticleIndex=0;
+    private int obstacleParticleIndex = 1;
     private int loseParticleIndex=1;
     private int currentStackListNumber=0;
     private bool isPlayerPushed=false;
@@ -126,7 +127,7 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
             isPlayerPushed = true;
 
-
+            OnParticlePlay(obstacleParticleIndex);
             print(GameManager.Instance.globalCollectedStack);
 
         }
@@ -142,7 +143,7 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.globalCollectedStack--;
             GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
             isPlayerPushed = true;
-
+            OnParticlePlay(obstacleParticleIndex);
             print(GameManager.Instance.globalCollectedStack);
         }
         else if(other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Obstacle && currentStackListNumber == 0 && GameManager.Instance.globalCollectedStack>1)
@@ -151,7 +152,7 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.globalCollectedStack--;
             GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
             isPlayerPushed = true;
-
+            OnParticlePlay(obstacleParticleIndex);
             print(GameManager.Instance.globalCollectedStack);
 
         }
@@ -162,18 +163,27 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.currentState = GameManager.GameState.Failed;
             print(GameManager.Instance.currentState);
             isPlayerPushed = true;
+            OnParticlePlay(obstacleParticleIndex);
 
         }
 
 
     }
+    private void OnCollisionWithGate(Collider other)
+    {
+        if (other.GetComponent<Character>().currentCharacterID==Character.CharacterID.Gate)
+        {
+            if (currentStackListNumber==0)
+            {
+
+            }
+            Destroy(other.gameObject);
+        }
+    }
     private void OnParticlePlay(int particleIndex)
     {
         particleList[particleIndex].Play();
     }
-    private void OnCollisionWithGate(Collider other)
-    {
-
-    }
+   
   
 }

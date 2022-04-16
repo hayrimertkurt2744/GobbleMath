@@ -10,8 +10,8 @@ public class GateMechanicsEditor : MonoBehaviour
     [SerializeField] private int gateNumber;
     public TextMeshPro gateText;
     public ParticleSystem[] particleSystems;
-    private Character character;
-    private int negativeIndex=1;
+    private Character character; 
+    private int negativeIndex = 1;
     private int positiveIndex=0;
    
     // Start is called before the first frame update
@@ -19,7 +19,7 @@ public class GateMechanicsEditor : MonoBehaviour
     {
         GatePreparing();
     }
-
+   
     private void GatePreparing()
     {
         // gateText = GetComponent<TextMeshPro>();
