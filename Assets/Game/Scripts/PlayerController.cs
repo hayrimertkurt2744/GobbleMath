@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     private int obstacleParticleIndex = 1;
     private int loseParticleIndex=1;
     private int currentStackListNumber=0;
+    private int gatePositiveParticleIndex = 2;
+    private int gateNegativeParticleIndex = 3;
     private bool isPlayerPushed=false;
 
     
@@ -70,6 +72,7 @@ public class PlayerController : MonoBehaviour
         {
             OnCollisionWithCollectable(other);
             OnCollisionWithObstacle(other);
+            OnCollisionWithGate(other);
             
         }
     }
@@ -156,11 +159,13 @@ public class PlayerController : MonoBehaviour
             print(GameManager.Instance.globalCollectedStack);
 
         }
-        else if (other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Obstacle &&  GameManager.Instance.globalCollectedStack == 0)
+        else if (other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Obstacle &&  GameManager.Instance.globalCollectedStack <= 0)
         {
             //gameObject.GetComponent<Rigidbody>().AddForce(-10, -10, -10, ForceMode.Impulse);
             print("you failed");
             GameManager.Instance.currentState = GameManager.GameState.Failed;
+            LoseTheGame();
+            LevelManager.Instance.NextLevel();
             print(GameManager.Instance.currentState);
             isPlayerPushed = true;
             OnParticlePlay(obstacleParticleIndex);
@@ -173,16 +178,85 @@ public class PlayerController : MonoBehaviour
     {
         if (other.GetComponent<Character>().currentCharacterID==Character.CharacterID.Gate)
         {
-            if (currentStackListNumber==0)
+          
+            if (currentStackListNumber == 0 && other.gameObject.GetComponent<GateMechanicsEditor>().isNegative == true && GameManager.Instance.globalCollectedStack > other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber)
             {
+                OnParticlePlay(gateNegativeParticleIndex);
+                stackList[currentStackListNumber].SetActive(false);
+                currentStackListNumber--;
+                GameManager.Instance.globalCollectedStack -= other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber;
+                print("works");
+            }
+            else if (currentStackListNumber >= 0 && other.gameObject.GetComponent<GateMechanicsEditor>().isNegative == true && GameManager.Instance.globalCollectedStack < other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber)
+            {
+                OnParticlePlay(gateNegativeParticleIndex);
+                stackList[currentStackListNumber].SetActive(false);
+                currentStackListNumber--;
+                GameManager.Instance.globalCollectedStack -= other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber;
+                GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
+                GameManager.Instance.currentState = GameManager.GameState.Failed;
+
+                print("works");
+
+                LoseTheGame();
+                LevelManager.Instance.NextLevel();
+                //LevelManager.Instance.RestartLevel();
+
+                //GameManager.Instance.ShowMenuOnNewSceneLoaded = true;
 
             }
+            else if (currentStackListNumber > 0 && other.gameObject.GetComponent<GateMechanicsEditor>().isNegative == true && GameManager.Instance.globalCollectedStack > other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber)
+            {
+                OnParticlePlay(gateNegativeParticleIndex);
+                stackList[currentStackListNumber].SetActive(false);
+                stackList[currentStackListNumber-1].SetActive(true);
+                currentStackListNumber--;
+                GameManager.Instance.globalCollectedStack -= other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber;
+                GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
+          
+            }
+
+            if (other.gameObject.GetComponent<GateMechanicsEditor>().isNegative == false && GameManager.Instance.globalCollectedStack==0)
+            {
+                OnParticlePlay(gatePositiveParticleIndex);
+                stackList[currentStackListNumber].SetActive(true);
+                GameManager.Instance.globalCollectedStack += other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber;
+                GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
+                
+            }
+            else if (other.gameObject.GetComponent<GateMechanicsEditor>().isNegative == false && GameManager.Instance.globalCollectedStack > 0 && currentStackListNumber< stackList.Length - 1)
+            {
+                OnParticlePlay(gatePositiveParticleIndex);
+                stackList[currentStackListNumber ].SetActive(false);
+                stackList[currentStackListNumber+1].SetActive(true);
+
+                currentStackListNumber++;
+                GameManager.Instance.globalCollectedStack += other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber;
+                GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
+            }
+            else if (other.gameObject.GetComponent<GateMechanicsEditor>().isNegative == false  && currentStackListNumber==stackList.Length-1)
+            {
+                OnParticlePlay(gatePositiveParticleIndex);
+                GameManager.Instance.globalCollectedStack += other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber;
+                GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
+            }
+
             Destroy(other.gameObject);
         }
+    }
+    public void LoseTheGame()
+    {
+        
+        GameManager.onLoseEvent?.Invoke();
+        
     }
     private void OnParticlePlay(int particleIndex)
     {
         particleList[particleIndex].Play();
+    }
+    private void OnParticlePlayGate(int particleIndex,Collider other)
+    {//kapýlarýn olduðu yerde particle play gerekiyor!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        other.GetComponent<GateMechanicsEditor>().particleSystems[particleIndex].Play();
     }
    
   

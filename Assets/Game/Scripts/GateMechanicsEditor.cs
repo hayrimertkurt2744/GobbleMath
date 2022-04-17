@@ -6,8 +6,8 @@ using TMPro;
 public class GateMechanicsEditor : MonoBehaviour
 {
     [Header("Gate Settings")]
-    [SerializeField] private bool isNegative;
-    [SerializeField] private int gateNumber;
+    public bool isNegative;
+    public int gateNumber;
     public TextMeshPro gateText;
     public ParticleSystem[] particleSystems;
     private Character character; 
@@ -27,8 +27,8 @@ public class GateMechanicsEditor : MonoBehaviour
         {
             particleSystems[negativeIndex].Play();
             particleSystems[positiveIndex].Stop();
-            gateNumber *= -1;
-            gateText.text = gateNumber.ToString();
+            
+            gateText.text = (gateNumber*-1).ToString();
 
         }
         else if (isNegative == false && gameObject.GetComponent<Character>().currentCharacterID == Character.CharacterID.Gate)
