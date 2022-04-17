@@ -14,7 +14,7 @@ public class FinishLine : MonoBehaviour
     public int numOfJumps;
     private int count = 63;
     private int clickCount = 0;
-    [HideInInspector]public bool
+    //[HideInInspector]public bool
 
 
 }
