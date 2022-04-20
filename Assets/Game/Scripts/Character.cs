@@ -11,6 +11,7 @@ public class Character : MonoBehaviour
         Boss,
         Obstacle,
         Gate,
+        FinishLine,
         None
     }
     public CharacterID currentCharacterID = CharacterID.None;

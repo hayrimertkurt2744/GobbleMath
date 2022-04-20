@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
         Normal,
         Failed,
         Victory,
+        LastSequence,
         Pause
     }
     //Max and min values on x axis to restrict the character. 

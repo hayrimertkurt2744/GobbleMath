@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
@@ -84,7 +85,7 @@ public class PlayerController : MonoBehaviour
             {   //toplama animasyonu/sesi ekle
                 stackList[currentStackListNumber].SetActive(true);
                 Destroy(other.gameObject);
-
+                OnStackTakeAnimation();
                 OnParticlePlay(collectParticleIndex);
 
                 GameManager.Instance.globalCollectedStack += 1;
@@ -97,6 +98,7 @@ public class PlayerController : MonoBehaviour
                 stackList[currentStackListNumber+1].SetActive(true);
                 stackList[currentStackListNumber].SetActive(false);
                 currentStackListNumber++;
+                OnStackTakeAnimation();
                 OnParticlePlay(collectParticleIndex);
                 //stackSpoon.transform.localScale.
 
@@ -109,6 +111,7 @@ public class PlayerController : MonoBehaviour
             {
                 Destroy(other.gameObject);
                 GameManager.Instance.globalCollectedStack += 1;
+                OnStackTakeAnimation();
                 OnParticlePlay(collectParticleIndex);
 
                 print(GameManager.Instance.globalCollectedStack);
@@ -255,9 +258,19 @@ public class PlayerController : MonoBehaviour
         particleList[particleIndex].Play();
     }
     private void OnParticlePlayGate(int particleIndex,Collider other)
-    {//kapýlarýn olduðu yerde particle play gerekiyor!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    {//its better to have particles play at the exact point with the gates
         other.GetComponent<GateMechanicsEditor>().particleSystems[particleIndex].Play();
     }
+
+    private void OnStackTakeAnimation()
+    {
+        /*stackList[currentStackListNumber].transform.DOScale(new Vector3(gameObject.transform.localScale.x*60, gameObject.transform.localScale.y*200, gameObject.transform.localScale.z*100), 0.5f).OnComplete(() => {
+
+            stackList[currentStackListNumber].transform.DOScale(new Vector3(gameObject.transform.localScale.x * 60, gameObject.transform.localScale.y * 90, gameObject.transform.localScale.z * 100), 0.5f);
+            //find the exact values
+        });*/
+    }
+
    
   
 }
