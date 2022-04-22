@@ -18,6 +18,7 @@ public class FinishLine : MonoBehaviour
     public int numOfJumps;
     private int count = 63;
     private int clickCount = 0;
+   
     [SerializeField]
     private CinemachineVirtualCamera vcam1;
     [SerializeField]
@@ -47,6 +48,8 @@ public class FinishLine : MonoBehaviour
                             spoon.transform.DORotate(new Vector3(75, 0, 0),1f,RotateMode.LocalAxisAdd);
                             clickCount++;
                             WinLevel();
+                            
+                            //LevelManager.Instance.NextLevel();
                         });
                     });
                 });

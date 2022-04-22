@@ -251,6 +251,7 @@ public class PlayerController : MonoBehaviour
     {
         
         GameManager.onLoseEvent?.Invoke();
+
         
     }
     private void OnParticlePlay(int particleIndex)

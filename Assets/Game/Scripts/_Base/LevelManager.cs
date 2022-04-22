@@ -67,7 +67,7 @@ public class LevelManager : MonoBehaviour
             else
             {
                 //oyun kapatýlý açýnca farklý level gelsin diyorsanýz true yapýn
-                GetNewLevel(false);
+                GetNewLevel(true);
             }
         }
         else
