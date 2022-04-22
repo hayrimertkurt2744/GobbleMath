@@ -23,8 +23,10 @@ public class FinishLine : MonoBehaviour
     [SerializeField]
     private CinemachineVirtualCamera vcam2; //last sequence cam
     //[HideInInspector] public bool isLastSequenceStarted = false;
+    public ParticleSystem[] finishParticleList;
     private void OnTriggerExit(Collider other)
     {
+        finishConfetti();
         SwitchCamPriority();
         if (other.GetComponent<Character>().currentCharacterID==Character.CharacterID.Player)
         {
@@ -44,10 +46,13 @@ public class FinishLine : MonoBehaviour
                             objectToThrow.transform.parent = null;
                             spoon.transform.DORotate(new Vector3(75, 0, 0),1f,RotateMode.LocalAxisAdd);
                             clickCount++;
+                            WinLevel();
                         });
                     });
                 });
             });
+            
+            
         }
   
     }
@@ -66,5 +71,15 @@ public class FinishLine : MonoBehaviour
         }
     }
 
+    private void finishConfetti()
+    {
+        finishParticleList[0].Play();
+        finishParticleList[1].Play();
 
+    }
+    public void WinLevel()
+    {
+        GameManager.onWinEvent?.Invoke();
+        //LevelManager.Instance.NextLevel();
+    }
 }

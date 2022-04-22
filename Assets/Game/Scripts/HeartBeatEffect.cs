@@ -14,7 +14,7 @@ public class HearthBeatEffect : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float animation= baseSize + Mathf.Sin(Time.time * 8f) * baseSize / 7f;
+        float animation= baseSize + Mathf.Sin(Time.time * 15f) * baseSize / 7f;
         transform.localScale = Vector3.one * animation;
     }
 }

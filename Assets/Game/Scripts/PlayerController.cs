@@ -202,7 +202,7 @@ public class PlayerController : MonoBehaviour
                 print("works");
 
                 LoseTheGame();
-                LevelManager.Instance.NextLevel();
+                LevelManager.Instance.RestartLevel();
                 //LevelManager.Instance.RestartLevel();
 
                 //GameManager.Instance.ShowMenuOnNewSceneLoaded = true;
@@ -264,11 +264,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnStackTakeAnimation()
     {
-        /*stackList[currentStackListNumber].transform.DOScale(new Vector3(gameObject.transform.localScale.x*60, gameObject.transform.localScale.y*200, gameObject.transform.localScale.z*100), 0.5f).OnComplete(() => {
-
-            stackList[currentStackListNumber].transform.DOScale(new Vector3(gameObject.transform.localScale.x * 60, gameObject.transform.localScale.y * 90, gameObject.transform.localScale.z * 100), 0.5f);
-            //find the exact values
-        });*/
+      
     }
 
    
