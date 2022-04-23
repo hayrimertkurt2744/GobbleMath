@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         ProcessPlayerMovement();
+
     }
     private void FixedUpdate()
     {
@@ -281,7 +282,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnStackTakeAnimation()
     {
-      
+        spoon.transform.DOScale(new Vector3(2f, 2f, 2f), 0.2f).OnComplete(() => {
+
+            spoon.transform.DOScale(new Vector3(1.7f, 1.7f, 1.7f), 0.2f);
+
+        });
     }
     private void onCollisionWithObstacle()
     {

@@ -59,7 +59,12 @@ public class GameManager : MonoBehaviour
     public float playerSmooth=8f;
     public int globalCollectedStack = 0;
 
-    public Action<int> onStackTake; 
+    public Action<int> onStackTake;
+
+    private Transform actor;
+    private Transform finishLine;
+    private UIManager manager;
+
 
     [Header("Game Object")]
     public GameObject stackSpoon;
@@ -90,7 +95,40 @@ public class GameManager : MonoBehaviour
         {
             FindObjectOfType<AppsFlyerObjectScript>().gameObject.SetActive(false);
         }
-
+        //actor = GameObject.FindGameObjectWithTag("Player").transform;
+        //finishLine = GameObject.FindGameObjectWithTag("FinishLine").transform;
         Application.targetFrameRate = 60;
+        UIManager manager = FindObjectOfType<UIManager>();
+
+
     }
+    private void Start()
+    {
+        if (IsDebug)
+        {
+            OnNewLevelLoaded();
+        }
+        LevelManager.onLevelRendered += OnNewLevelLoaded;
+    }
+    private void OnDisable()
+    {
+        LevelManager.onLevelRendered -= OnNewLevelLoaded;
+    }
+    private void OnNewLevelLoaded()
+    {
+         /*actor =GameObject.FindGameObjectWithTag("Player").transform;
+         finishLine = GameObject.FindGameObjectWithTag("FinishLine").transform;
+         manager.SetProgresBarMaxValue(finishLine.transform.position.z);*/
+        
+    }
+    private void Update()
+    {
+        if (currentState==GameState.BeforeStart)
+        {
+            globalCollectedStack = 0;
+            onStackTake(globalCollectedStack);
+        }
+       // manager.UpdateProgressBar(GameManager.Instance.actor.transform.position.z, 1f);
+    }
+
 }

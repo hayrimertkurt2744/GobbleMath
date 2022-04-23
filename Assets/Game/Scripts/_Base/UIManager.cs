@@ -57,6 +57,7 @@ public class UIManager : MonoBehaviour
         InputManager.Instance.onTouchStart -= CloseTheMenu;
         GameManager.Instance.onStackTake -= onNewStackTake;
     }
+    
 
     public void SetProgresBarMaxValue(float maxValue)
     {
@@ -97,6 +98,7 @@ public class UIManager : MonoBehaviour
 
             ShowFPS();
         }
+        
     }
 
     /// <summary>
