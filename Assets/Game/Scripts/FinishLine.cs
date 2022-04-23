@@ -8,10 +8,11 @@ using UnityEngine.UI;
 public class FinishLine : MonoBehaviour
 {
     public GameObject spoon;
-    public GameObject objectToThrow;
+    public GameObject[] objectToThrow;
     public Button nextLevelButton;
+    private PlayerController playerController;
 
-    public Vector3 endPoint;
+    public Vector3[] endPoint;
     public Vector3 afterFinishTransfom;
     public bool followingCam=true;
     [Header("Jump Parameters")]
@@ -41,18 +42,34 @@ public class FinishLine : MonoBehaviour
                 spoon.transform.DORotate(new Vector3(0, 180, 0), 1f, RotateMode.FastBeyond360).OnComplete(() =>
                 {
 
-                    spoon.transform.DORotate(new Vector3(-75, 180, 0), 0.8f, RotateMode.FastBeyond360).OnComplete(() =>
+                    spoon.transform.DORotate(new Vector3(-75, 180, 0), 0.3f, RotateMode.FastBeyond360).OnComplete(() =>
                     {
-                        objectToThrow.gameObject.SetActive(true);
-
-                        objectToThrow.gameObject.transform.DOJump(endPoint, jumpPower, numOfJumps, jumpDuration, snapping).OnComplete(() =>
+                        foreach (GameObject gameObject in objectToThrow)
                         {
-                            objectToThrow.transform.parent = null;
+                            gameObject.SetActive(true);
+                        }
+
+                        objectToThrow[0].gameObject.transform.DOJump(endPoint[0], jumpPower, numOfJumps, jumpDuration, snapping);
+                        objectToThrow[1].gameObject.transform.DOJump(endPoint[1], jumpPower, numOfJumps, jumpDuration, snapping);
+                        objectToThrow[2].gameObject.transform.DOJump(endPoint[2], jumpPower, numOfJumps, jumpDuration, snapping);
+                        objectToThrow[3].gameObject.transform.DOJump(endPoint[3], jumpPower, numOfJumps, jumpDuration, snapping);
+                        objectToThrow[4].gameObject.transform.DOJump(endPoint[4], jumpPower, numOfJumps, jumpDuration, snapping);
+                        
+
+                        objectToThrow[5].gameObject.transform.DOJump(endPoint[5], jumpPower, numOfJumps, jumpDuration, snapping).OnComplete(() =>
+                        {
+                            foreach (GameObject gameObject in objectToThrow)
+                            {
+                                gameObject.transform.parent = null;
+                            }
+                            
                             spoon.transform.DORotate(new Vector3(75, 0, 0),1f,RotateMode.LocalAxisAdd);
+                            
                             clickCount++;
                             GameManager.onWinEvent?.Invoke();
                             nextLevelButton.gameObject.SetActive(true);
                             nextLevelButton.onClick.AddListener(GetNextLevel);
+                           
 
                         });
                     });
@@ -86,6 +103,11 @@ public class FinishLine : MonoBehaviour
     }
     public void GetNextLevel()
     {
+        foreach (GameObject gameObject in objectToThrow)
+        {
+            gameObject.SetActive(false);
+        }
         LevelManager.Instance.NextLevel();
+
     }
 }

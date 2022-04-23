@@ -2,17 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     public GameObject stackSpoon;
     public GameObject spoon;
     public GameObject[] stackList;
+    public Button restartLevelButton; 
     public ParticleSystem[] particleList;
     private int collectParticleIndex=0;
     private int obstacleParticleIndex = 1;
     private int loseParticleIndex=1;
-    private int currentStackListNumber=0;
+    [HideInInspector]public int currentStackListNumber=0;
     private int gatePositiveParticleIndex = 2;
     private int gateNegativeParticleIndex = 3;
     private bool isPlayerPushed=false;
@@ -54,7 +56,7 @@ public class PlayerController : MonoBehaviour
 
     private void ProcessPlayerMovement()
     {
-        if (GameManager.Instance.currentState == GameManager.GameState.Normal && GameManager.Instance.currentState != GameManager.GameState.Victory)
+        if (GameManager.Instance.currentState == GameManager.GameState.Normal && GameManager.Instance.currentState != GameManager.GameState.Victory && GameManager.Instance.currentState != GameManager.GameState.Failed)
         {
             GetComponent<Mover>().MoveTo(new Vector3(
              0f, 0f, GameManager.Instance.forwardSpeed));
@@ -64,7 +66,7 @@ public class PlayerController : MonoBehaviour
     private void ProcessPlayerSwerve()
     {
         //clamp makes move to method to restrict player in a range.
-        if (GameManager.Instance.currentState==GameManager.GameState.Normal && GameManager.Instance.currentState!=GameManager.GameState.Victory)
+        if (GameManager.Instance.currentState==GameManager.GameState.Normal && GameManager.Instance.currentState!=GameManager.GameState.Victory && GameManager.Instance.currentState != GameManager.GameState.Failed)
         {//the all movement happen here.
            GetComponent<Mover>().MoveTo(new 
                Vector3(-InputManager.Instance.GetDirection().x * GameManager.Instance.horizontalSpeed,0f,0f));
@@ -181,7 +183,7 @@ public class PlayerController : MonoBehaviour
             print("you failed");
             GameManager.Instance.currentState = GameManager.GameState.Failed;
             LoseTheGame();
-            LevelManager.Instance.NextLevel();
+
             print(GameManager.Instance.currentState);
             isPlayerPushed = true;
             OnParticlePlay(obstacleParticleIndex);
@@ -219,11 +221,7 @@ public class PlayerController : MonoBehaviour
                 print("works");
 
                 LoseTheGame();
-                LevelManager.Instance.RestartLevel();
-                //LevelManager.Instance.RestartLevel();
-
-                //GameManager.Instance.ShowMenuOnNewSceneLoaded = true;
-
+                
             }
             else if (currentStackListNumber > 0 && other.gameObject.GetComponent<GateMechanicsEditor>().isNegative == true && GameManager.Instance.globalCollectedStack > other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber)
             {
@@ -266,10 +264,16 @@ public class PlayerController : MonoBehaviour
     }
     public void LoseTheGame()
     {
-        
-        GameManager.onLoseEvent?.Invoke();
 
-        
+        GameManager.onLoseEvent?.Invoke();
+        restartLevelButton.gameObject.SetActive(true);
+        restartLevelButton.onClick.AddListener(GetRestart);
+
+
+    }
+    public void GetRestart()
+    {
+        LevelManager.Instance.RestartLevel();
     }
     private void OnParticlePlay(int particleIndex)
     {
