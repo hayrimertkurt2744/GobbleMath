@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Cinemachine;
+using UnityEngine.UI;
 
 public class FinishLine : MonoBehaviour
 {
     public GameObject spoon;
     public GameObject objectToThrow;
+    public Button nextLevelButton;
+
     public Vector3 endPoint;
     public Vector3 afterFinishTransfom;
     public bool followingCam=true;
@@ -47,9 +50,10 @@ public class FinishLine : MonoBehaviour
                             objectToThrow.transform.parent = null;
                             spoon.transform.DORotate(new Vector3(75, 0, 0),1f,RotateMode.LocalAxisAdd);
                             clickCount++;
-                            WinLevel();
-                            
-                            //LevelManager.Instance.NextLevel();
+                            GameManager.onWinEvent?.Invoke();
+                            nextLevelButton.gameObject.SetActive(true);
+                            nextLevelButton.onClick.AddListener(GetNextLevel);
+
                         });
                     });
                 });
@@ -80,9 +84,8 @@ public class FinishLine : MonoBehaviour
         finishParticleList[1].Play();
 
     }
-    public void WinLevel()
+    public void GetNextLevel()
     {
-        GameManager.onWinEvent?.Invoke();
-        //LevelManager.Instance.NextLevel();
+        LevelManager.Instance.NextLevel();
     }
 }

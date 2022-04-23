@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9132199163920619562}
   - component: {fileID: 4175677230994801959}
   m_Layer: 0
-  m_Name: babyfood0
+  m_Name: babyfood1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

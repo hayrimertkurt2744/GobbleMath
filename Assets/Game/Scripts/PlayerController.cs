@@ -6,6 +6,7 @@ using DG.Tweening;
 public class PlayerController : MonoBehaviour
 {
     public GameObject stackSpoon;
+    public GameObject spoon;
     public GameObject[] stackList;
     public ParticleSystem[] particleList;
     private int collectParticleIndex=0;
@@ -15,6 +16,8 @@ public class PlayerController : MonoBehaviour
     private int gatePositiveParticleIndex = 2;
     private int gateNegativeParticleIndex = 3;
     private bool isPlayerPushed=false;
+    private UIManager uiManager;
+    [HideInInspector] public Transform playerTransform;
 
     
 
@@ -24,6 +27,7 @@ public class PlayerController : MonoBehaviour
         InputManager.Instance.onTouchStart += ProcessPlayerSwerve;
         InputManager.Instance.onTouchMove += ProcessPlayerSwerve;
         stackSpoon = GameManager.Instance.stackSpoon;
+        
 
     }
     private void OnDisable()
@@ -49,7 +53,7 @@ public class PlayerController : MonoBehaviour
 
     private void ProcessPlayerMovement()
     {
-        if (GameManager.Instance.currentState == GameManager.GameState.Normal)
+        if (GameManager.Instance.currentState == GameManager.GameState.Normal && GameManager.Instance.currentState != GameManager.GameState.Victory)
         {
             GetComponent<Mover>().MoveTo(new Vector3(
              0f, 0f, GameManager.Instance.forwardSpeed));
@@ -59,7 +63,7 @@ public class PlayerController : MonoBehaviour
     private void ProcessPlayerSwerve()
     {
         //clamp makes move to method to restrict player in a range.
-        if (GameManager.Instance.currentState==GameManager.GameState.Normal)
+        if (GameManager.Instance.currentState==GameManager.GameState.Normal && GameManager.Instance.currentState!=GameManager.GameState.Victory)
         {//the all movement happen here.
            GetComponent<Mover>().MoveTo(new 
                Vector3(-InputManager.Instance.GetDirection().x * GameManager.Instance.horizontalSpeed,0f,0f));
@@ -81,6 +85,7 @@ public class PlayerController : MonoBehaviour
     {
         if ( other.GetComponent<Collectable>() != null && other.GetComponent<Character>().currentCharacterID==Character.CharacterID.Stack)
         {
+            //uiManager.ShowPraiseText(uiManager.GetRandomWord());
             if (other.GetComponent<Collectable>() != null && other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Stack && GameManager.Instance.globalCollectedStack == 0)
             {   //toplama animasyonu/sesi ekle
                 stackList[currentStackListNumber].SetActive(true);
@@ -122,7 +127,8 @@ public class PlayerController : MonoBehaviour
     }
     private void OnCollisionWithObstacle(Collider other)
     {   //engele çarpýp saçýlma ses/animasyonu ekle
-       
+        //onCollisionWithObstacle();
+
         if (other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Obstacle && currentStackListNumber==0 && GameManager.Instance.globalCollectedStack == 1)
         {
             //gameObject.GetComponent<Rigidbody>().AddForce(-10, -10, -10, ForceMode.Impulse);
@@ -135,6 +141,8 @@ public class PlayerController : MonoBehaviour
 
             OnParticlePlay(obstacleParticleIndex);
             print(GameManager.Instance.globalCollectedStack);
+            onCollisionWithObstacle();
+            Destroy(other.gameObject);
 
         }
         else if(other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Obstacle && currentStackListNumber != 0 && GameManager.Instance.globalCollectedStack>1)
@@ -151,6 +159,8 @@ public class PlayerController : MonoBehaviour
             isPlayerPushed = true;
             OnParticlePlay(obstacleParticleIndex);
             print(GameManager.Instance.globalCollectedStack);
+            onCollisionWithObstacle();
+            Destroy(other.gameObject);
         }
         else if(other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Obstacle && currentStackListNumber == 0 && GameManager.Instance.globalCollectedStack>1)
         {
@@ -160,6 +170,8 @@ public class PlayerController : MonoBehaviour
             isPlayerPushed = true;
             OnParticlePlay(obstacleParticleIndex);
             print(GameManager.Instance.globalCollectedStack);
+            onCollisionWithObstacle();
+            Destroy(other.gameObject);
 
         }
         else if (other.GetComponent<Character>().currentCharacterID == Character.CharacterID.Obstacle &&  GameManager.Instance.globalCollectedStack <= 0)
@@ -172,8 +184,11 @@ public class PlayerController : MonoBehaviour
             print(GameManager.Instance.currentState);
             isPlayerPushed = true;
             OnParticlePlay(obstacleParticleIndex);
+            onCollisionWithObstacle();
+            Destroy(other.gameObject);
 
         }
+        
 
 
     }
@@ -188,6 +203,7 @@ public class PlayerController : MonoBehaviour
                 stackList[currentStackListNumber].SetActive(false);
                 currentStackListNumber--;
                 GameManager.Instance.globalCollectedStack -= other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber;
+
                 print("works");
             }
             else if (currentStackListNumber >= 0 && other.gameObject.GetComponent<GateMechanicsEditor>().isNegative == true && GameManager.Instance.globalCollectedStack < other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber)
@@ -267,6 +283,11 @@ public class PlayerController : MonoBehaviour
     {
       
     }
+    private void onCollisionWithObstacle()
+    {
+        spoon.transform.DOMove(spoon.transform.position + new Vector3(0, 0, -1), 0.5f, false);
+    }
+
 
    
   

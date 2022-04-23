@@ -19,6 +19,7 @@ public class Character : MonoBehaviour
     public Material currentMaterial;
     private PlayerController playerController;
 
+
     
 
     private void Start()
