@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Praise
   - FinishLine
+  - Two
+  - Three
+  - Five
+  - TapTimingBar
   layers:
   - Default
   - TransparentFX

@@ -11,6 +11,9 @@ public class FinishLine : MonoBehaviour
     public GameObject[] objectToThrow;
     public Button nextLevelButton;
     private PlayerController playerController;
+    private CursorInteraction cursorInteraction;
+    
+    
 
     public Vector3[] endPoint;
     public Vector3 afterFinishTransfom;
@@ -66,11 +69,15 @@ public class FinishLine : MonoBehaviour
                             spoon.transform.DORotate(new Vector3(75, 0, 0),1f,RotateMode.LocalAxisAdd);
                             
                             clickCount++;
-                            GameManager.onWinEvent?.Invoke();
-                            nextLevelButton.gameObject.SetActive(true);
-                            nextLevelButton.onClick.AddListener(GetNextLevel);
-                           
+                            GameManager.Instance.currentState = GameManager.GameState.TapTiming;
 
+                            cursorInteraction.tapTimingBar.SetActive(true);
+                            //GameManager.Instance.currentState = GameManager.GameState.Victory;
+                            //GameManager.onWinEvent?.Invoke();
+                            //nextLevelButton.gameObject.SetActive(true);
+                            //nextLevelButton.onClick.AddListener(GetNextLevel);
+                           
+                           
                         });
                     });
                 });
@@ -78,6 +85,7 @@ public class FinishLine : MonoBehaviour
             
             
         }
+        
   
     }
     private void SwitchCamPriority()

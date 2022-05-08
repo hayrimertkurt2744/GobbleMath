@@ -13,16 +13,18 @@ public class BezierFollow : MonoBehaviour
 
     private Vector2 objectPosition;
 
-    private float speedModifier;
+    public float speedModifier;
 
     private bool coroutineAllowed;
+
+    public Transform lookAtPoint;
 
     // Start is called before the first frame update
     void Start()
     {
         routeToGo = 0;
         tParam = 0f;
-        speedModifier = 1.2f;
+        speedModifier = 1.1f;
         coroutineAllowed = true;
     }
 
@@ -33,6 +35,11 @@ public class BezierFollow : MonoBehaviour
         {
             StartCoroutine(GoByTheRoute(routeToGo));
         }
+        Vector2 direction = new Vector2(
+            (lookAtPoint.position.x - transform.position.x), 
+            (lookAtPoint.position.y - transform.position.y));
+        transform.up = -direction;
+
     }
 
     private IEnumerator GoByTheRoute(int routeNum)

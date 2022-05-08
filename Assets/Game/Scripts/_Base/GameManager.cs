@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
         Failed,
         Victory,
         LastSequence,
+        TapTiming,
         Pause
     }
     //Max and min values on x axis to restrict the character. 
