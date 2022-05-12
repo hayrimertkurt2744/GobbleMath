@@ -1466,7 +1466,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 276498530251316533}
-  m_LocalRotation: {x: 0.15295556, y: -0.029342717, z: 0.004543623, w: 0.98778695}
+  m_LocalRotation: {x: 0.15295558, y: -0.029342744, z: 0.0045436276, w: 0.98778695}
   m_LocalPosition: {x: 1.97, y: 11.379999, z: -63.190002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -6131,6 +6131,11 @@ PrefabInstance:
         type: 3}
       propertyPath: jumpDuration
       value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7717020901642236726, guid: 3903509b78b0b394f8f2225221517453,
+        type: 3}
+      propertyPath: tapTimingBar
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7717020901642236726, guid: 3903509b78b0b394f8f2225221517453,
         type: 3}

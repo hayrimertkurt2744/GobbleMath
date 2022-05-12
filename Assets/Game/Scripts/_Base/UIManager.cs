@@ -22,6 +22,7 @@ public class UIManager : MonoBehaviour
     [Header("Events")]
     [SerializeField] private UnityEvent onWinUI;
     [SerializeField] private UnityEvent onLoseUI;
+    [SerializeField] private UnityEvent onTapTimingUI;
     [SerializeField] private UnityEvent onGameStartUI;
     [SerializeField] private UnityEvent forceToCloseOnNewLevel;
 
@@ -41,6 +42,7 @@ public class UIManager : MonoBehaviour
     private void OnEnable()
     {
         GameManager.onWinEvent += ExecuteOnWin;
+        GameManager.onTapTimingEvent += ExecuteOnTapTiming;
         LevelManager.onNewLevelLoaded += UpdateLevelText;
         GameManager.onLoseEvent += ExecuteOnLose;
         LevelManager.onNewLevelLoaded += ForceToClose;
@@ -51,6 +53,7 @@ public class UIManager : MonoBehaviour
     private void OnDisable()
     {
         GameManager.onWinEvent -= ExecuteOnWin;
+        GameManager.onTapTimingEvent -= ExecuteOnTapTiming;
         GameManager.onLoseEvent -= ExecuteOnLose;
         LevelManager.onNewLevelLoaded -= UpdateLevelText;
         LevelManager.onNewLevelLoaded -= ForceToClose;
@@ -177,7 +180,11 @@ public class UIManager : MonoBehaviour
 
         if (inputCounter >= 1 && inputCounter < 3)
         {
-            GameManager.Instance.currentState = GameManager.GameState.Normal;
+            if (GameManager.Instance.currentState==GameManager.GameState.BeforeStart)
+            {
+                GameManager.Instance.currentState = GameManager.GameState.Normal;
+            }
+            
 
             if (GameManager.Instance.GiveInputOnFirstClick)
             {
@@ -203,6 +210,11 @@ public class UIManager : MonoBehaviour
     {
         GameManager.Instance.currentState = GameManager.GameState.Victory;
         onWinUI?.Invoke();
+    }
+    private void ExecuteOnTapTiming()
+    {
+        GameManager.Instance.currentState = GameManager.GameState.TapTiming;
+        onTapTimingUI?.Invoke();
     }
     private void ExecuteOnLose()
     {

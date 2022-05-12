@@ -11,7 +11,7 @@ public class FinishLine : MonoBehaviour
     public GameObject[] objectToThrow;
     public Button nextLevelButton;
     private PlayerController playerController;
-    private CursorInteraction cursorInteraction;
+    public GameObject tapTimingBar;
     
     
 
@@ -32,6 +32,7 @@ public class FinishLine : MonoBehaviour
     private CinemachineVirtualCamera vcam2; //last sequence cam
     //[HideInInspector] public bool isLastSequenceStarted = false;
     public ParticleSystem[] finishParticleList;
+   
     private void OnTriggerExit(Collider other)
     {
         finishConfetti();
@@ -39,9 +40,9 @@ public class FinishLine : MonoBehaviour
         if (other.GetComponent<Character>().currentCharacterID==Character.CharacterID.Player)
         {
             GameManager.Instance.currentState = GameManager.GameState.LastSequence;
-
+            
             spoon.transform.DOMove(afterFinishTransfom, 2f, false).OnComplete(() => {
-
+                //tapTimingBar.SetActive(true);
                 spoon.transform.DORotate(new Vector3(0, 180, 0), 1f, RotateMode.FastBeyond360).OnComplete(() =>
                 {
 
@@ -57,26 +58,30 @@ public class FinishLine : MonoBehaviour
                         objectToThrow[2].gameObject.transform.DOJump(endPoint[2], jumpPower, numOfJumps, jumpDuration, snapping);
                         objectToThrow[3].gameObject.transform.DOJump(endPoint[3], jumpPower, numOfJumps, jumpDuration, snapping);
                         objectToThrow[4].gameObject.transform.DOJump(endPoint[4], jumpPower, numOfJumps, jumpDuration, snapping);
-                        
+
 
                         objectToThrow[5].gameObject.transform.DOJump(endPoint[5], jumpPower, numOfJumps, jumpDuration, snapping).OnComplete(() =>
                         {
-                            foreach (GameObject gameObject in objectToThrow)
-                            {
-                                gameObject.transform.parent = null;
-                            }
-                            
-                            spoon.transform.DORotate(new Vector3(75, 0, 0),1f,RotateMode.LocalAxisAdd);
-                            
-                            clickCount++;
-                            GameManager.Instance.currentState = GameManager.GameState.TapTiming;
+                        foreach (GameObject gameObject in objectToThrow)
+                        {
+                            gameObject.transform.parent = null;
+                        }
 
-                            cursorInteraction.tapTimingBar.SetActive(true);
-                            //GameManager.Instance.currentState = GameManager.GameState.Victory;
-                            //GameManager.onWinEvent?.Invoke();
-                            //nextLevelButton.gameObject.SetActive(true);
-                            //nextLevelButton.onClick.AddListener(GetNextLevel);
-                           
+                        spoon.transform.DORotate(new Vector3(75, 0, 0), 1f, RotateMode.LocalAxisAdd);
+
+                        clickCount++;
+                            //GameManager.Instance.currentState = GameManager.GameState.TapTiming;
+
+
+
+                                GameManager.onTapTimingEvent?.Invoke();
+
+                                GameManager.Instance.currentState = GameManager.GameState.Victory;
+                                GameManager.onWinEvent?.Invoke();
+                                nextLevelButton.gameObject.SetActive(true);
+                                nextLevelButton.onClick.AddListener(GetNextLevel);
+
+
                            
                         });
                     });

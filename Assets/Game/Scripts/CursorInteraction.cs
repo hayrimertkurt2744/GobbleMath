@@ -12,47 +12,57 @@ public class CursorInteraction : MonoBehaviour
    
     private void Update()
     {
-        if (GameManager.Instance.currentState == GameManager.GameState.TapTiming)
+        /*if (GameManager.Instance.currentState == GameManager.GameState.TapTiming)
         {
             
 
 
-            if (Input.GetKeyDown(KeyCode.Space) )
-            {
+           
 
-                bezierFollow.speedModifier = 0;
-            }
+                //bezierFollow.speedModifier = 0;
+           
 
             tapTimingStopped = true;
-        }
+        }*/
        
     }
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerExit2D(Collider2D other)
     {
-        if (tapTimingStopped==true)
+        /*if (tapTimingStopped==true)
         {
-            if (other.gameObject.tag == "Two")
-            {
-                multiplier = 2;
-            }
-            else if (other.gameObject.tag == "Three")
-            {
-                multiplier = 3;
-            }
-            else if (other.gameObject.tag == "Five")
-            {
-                multiplier = 5;
-            }
-            else if (other.gameObject == null)
-            {
-                multiplier = 2;
-
-            }
-
-            GameManager.Instance.globalCollectedStack *= multiplier;
-            GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
+            
+        }*/
+        print("collided");
+        if (other.gameObject.tag == "Two")
+        {
+            multiplier = 2;
+            print(multiplier);
+            print("collided");
         }
-        
+        else if (other.gameObject.tag == "Three")
+        {
+            multiplier = 3;
+            print(multiplier);
+            print("collided");
+        }
+        else if (other.gameObject.tag == "Five")
+        {
+            multiplier = 5;
+            print(multiplier);
+            print("collided");
+        }
+        else if (other.gameObject == null)
+        {
+            multiplier = 2;
+            print(multiplier);
+            print("collided");
+
+        }
+
+        GameManager.Instance.globalCollectedStack *= multiplier;
+        GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
+        GameManager.Instance.currentState = GameManager.GameState.Victory;
+
         //tapTimingActive = false;
     }
 }

@@ -24,13 +24,14 @@ public class BezierFollow : MonoBehaviour
     {
         routeToGo = 0;
         tParam = 0f;
-        speedModifier = 1.1f;
+        
         coroutineAllowed = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+        speedModifier = GameManager.Instance.globalSpeedModifier;
         if (coroutineAllowed)
         {
             StartCoroutine(GoByTheRoute(routeToGo));

@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
 
     public static Action onWinEvent;
     public static Action onLoseEvent;
+    public static Action onTapTimingEvent;
 
     [Header("Game Settings")]
     public GameState currentState = GameState.BeforeStart;
@@ -69,6 +70,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Game Object")]
     public GameObject stackSpoon;
+
+    [Header("TapTimingBar Features")]
+    public float globalSpeedModifier=1.1f;
 
 
     private void Awake()
