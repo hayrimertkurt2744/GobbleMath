@@ -179,6 +179,7 @@ public class LevelManager : MonoBehaviour
         isRestarted = false;
         nextLevelIndexTaked = false;
         GameManager.Instance.currentState = GameManager.GameState.BeforeStart;
+        
     }
     [ContextMenu("Next Level Debug")]
     private void NextLevelDebug()

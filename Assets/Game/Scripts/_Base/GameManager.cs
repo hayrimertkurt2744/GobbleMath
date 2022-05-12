@@ -130,8 +130,10 @@ public class GameManager : MonoBehaviour
     {
         if (currentState==GameState.BeforeStart)
         {
+            
             globalCollectedStack = 0;
             onStackTake(globalCollectedStack);
+
         }
        // manager.UpdateProgressBar(GameManager.Instance.actor.transform.position.z, 1f);
     }
