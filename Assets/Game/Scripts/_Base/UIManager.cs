@@ -26,9 +26,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private UnityEvent onGameStartUI;
     [SerializeField] private UnityEvent forceToCloseOnNewLevel;
 
+
+
     private float deltaTime;
     private int inputCounter = 0;
     private bool isUpdating = false;
+    public GameObject tapTimingBar;
     private void Awake()
     {
         onGameStartUI?.Invoke();
@@ -53,7 +56,7 @@ public class UIManager : MonoBehaviour
     private void OnDisable()
     {
         GameManager.onWinEvent -= ExecuteOnWin;
-        GameManager.onTapTimingEvent -= ExecuteOnTapTiming;
+        //GameManager.onTapTimingEvent -= ExecuteOnTapTiming;
         GameManager.onLoseEvent -= ExecuteOnLose;
         LevelManager.onNewLevelLoaded -= UpdateLevelText;
         LevelManager.onNewLevelLoaded -= ForceToClose;
@@ -214,7 +217,8 @@ public class UIManager : MonoBehaviour
     private void ExecuteOnTapTiming()
     {
         GameManager.Instance.currentState = GameManager.GameState.TapTiming;
-        onTapTimingUI?.Invoke();
+        tapTimingBar.SetActive(true);
+        //onTapTimingUI?.Invoke();
     }
     private void ExecuteOnLose()
     {

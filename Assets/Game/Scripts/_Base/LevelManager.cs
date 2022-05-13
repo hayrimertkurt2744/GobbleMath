@@ -20,6 +20,7 @@ public class LevelManager : MonoBehaviour
 
     private GameObject currentLevel;
     private GameObject lastLevel;
+    public GameObject tapTimingBar;
 
 #pragma warning disable
     public static event Action onNewLevelLoaded;
@@ -239,6 +240,8 @@ public class LevelManager : MonoBehaviour
         {
             lastLevel = currentLevel;
             Destroy(currentLevel);
+            tapTimingBar.SetActive(false);
+            GameManager.Instance.globalSpeedModifier = 1.1f;
         }
         onNewLevelLoaded?.Invoke();
         currentLevel = Instantiate(newLevel, Vector3.zero, Quaternion.identity);

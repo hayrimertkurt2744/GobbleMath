@@ -42,7 +42,7 @@ public class FinishLine : MonoBehaviour
             GameManager.Instance.currentState = GameManager.GameState.LastSequence;
             
             spoon.transform.DOMove(afterFinishTransfom, 2f, false).OnComplete(() => {
-                //tapTimingBar.SetActive(true);
+                
                 spoon.transform.DORotate(new Vector3(0, 180, 0), 1f, RotateMode.FastBeyond360).OnComplete(() =>
                 {
 
