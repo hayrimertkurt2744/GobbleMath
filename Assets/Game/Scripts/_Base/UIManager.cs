@@ -56,7 +56,7 @@ public class UIManager : MonoBehaviour
     private void OnDisable()
     {
         GameManager.onWinEvent -= ExecuteOnWin;
-        //GameManager.onTapTimingEvent -= ExecuteOnTapTiming;
+        GameManager.onTapTimingEvent -= ExecuteOnTapTiming;
         GameManager.onLoseEvent -= ExecuteOnLose;
         LevelManager.onNewLevelLoaded -= UpdateLevelText;
         LevelManager.onNewLevelLoaded -= ForceToClose;
@@ -218,6 +218,7 @@ public class UIManager : MonoBehaviour
     {
         GameManager.Instance.currentState = GameManager.GameState.TapTiming;
         tapTimingBar.SetActive(true);
+        print("Excecute tap timing");
         //onTapTimingUI?.Invoke();
     }
     private void ExecuteOnLose()

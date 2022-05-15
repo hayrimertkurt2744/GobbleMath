@@ -26,6 +26,11 @@ public class BezierFollow : MonoBehaviour
         tParam = 0f;
         
         coroutineAllowed = true;
+
+    }
+    private void OnDisable()
+    {
+        coroutineAllowed = true;
     }
 
     // Update is called once per frame

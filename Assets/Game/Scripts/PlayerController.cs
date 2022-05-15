@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
     private int gatePositiveParticleIndex = 2;
     private int gateNegativeParticleIndex = 3;
     private bool isPlayerPushed=false;
+    private float elapsedTime;
+    private float percentageComplete;
     private UIManager uiManager;
     [HideInInspector] public Transform playerTransform;
 
@@ -43,6 +45,9 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         ProcessPlayerMovement();
+        elapsedTime += Time.deltaTime;
+        percentageComplete = elapsedTime / 3;
+
 
     }
     private void FixedUpdate()
@@ -96,6 +101,8 @@ public class PlayerController : MonoBehaviour
                 OnStackTakeAnimation();
                 OnParticlePlay(collectParticleIndex);
 
+                OnStackTakeShader(1 / 10);
+
                 GameManager.Instance.globalCollectedStack += 1;
                 print(GameManager.Instance.globalCollectedStack);
             }
@@ -109,7 +116,7 @@ public class PlayerController : MonoBehaviour
                 OnStackTakeAnimation();
                 OnParticlePlay(collectParticleIndex);
                 //stackSpoon.transform.localScale.
-
+                OnStackTakeShader(1 / 10);
                 GameManager.Instance.globalCollectedStack += 1;
                 print(GameManager.Instance.globalCollectedStack);
                 GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
@@ -121,7 +128,7 @@ public class PlayerController : MonoBehaviour
                 GameManager.Instance.globalCollectedStack += 1;
                 OnStackTakeAnimation();
                 OnParticlePlay(collectParticleIndex);
-
+                OnStackTakeShader(1 / 10);
                 print(GameManager.Instance.globalCollectedStack);
                 GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
                 //max durumda stack ekleyince açýlacak animasyonu ekle
@@ -141,7 +148,7 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.globalCollectedStack--;
             GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
             isPlayerPushed = true;
-
+            OnStackTakeShader(-3/10);
             OnParticlePlay(obstacleParticleIndex);
             print(GameManager.Instance.globalCollectedStack);
             onCollisionWithObstacle();
@@ -156,7 +163,7 @@ public class PlayerController : MonoBehaviour
             stackList[currentStackListNumber - 1].SetActive(true);
             stackList[currentStackListNumber].SetActive(false);
             currentStackListNumber--;
-
+            OnStackTakeShader(-3 / 10);
             GameManager.Instance.globalCollectedStack--;
             GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
             isPlayerPushed = true;
@@ -171,6 +178,7 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.globalCollectedStack--;
             GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
             isPlayerPushed = true;
+            OnStackTakeShader(-3 / 10);
             OnParticlePlay(obstacleParticleIndex);
             print(GameManager.Instance.globalCollectedStack);
             onCollisionWithObstacle();
@@ -183,7 +191,7 @@ public class PlayerController : MonoBehaviour
             print("you failed");
             GameManager.Instance.currentState = GameManager.GameState.Failed;
             LoseTheGame();
-
+            OnStackTakeShader(-3 / 10);
             print(GameManager.Instance.currentState);
             isPlayerPushed = true;
             OnParticlePlay(obstacleParticleIndex);
@@ -206,7 +214,7 @@ public class PlayerController : MonoBehaviour
                 stackList[currentStackListNumber].SetActive(false);
                 currentStackListNumber--;
                 GameManager.Instance.globalCollectedStack -= other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber;
-
+                OnStackTakeShader(-other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber/20);
                 print("works");
             }
             else if (currentStackListNumber >= 0 && other.gameObject.GetComponent<GateMechanicsEditor>().isNegative == true && GameManager.Instance.globalCollectedStack < other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber)
@@ -217,7 +225,7 @@ public class PlayerController : MonoBehaviour
                 GameManager.Instance.globalCollectedStack -= other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber;
                 GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
                 GameManager.Instance.currentState = GameManager.GameState.Failed;
-
+                OnStackTakeShader(-other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber / 20);
                 print("works");
 
                 LoseTheGame();
@@ -230,8 +238,9 @@ public class PlayerController : MonoBehaviour
                 stackList[currentStackListNumber-1].SetActive(true);
                 currentStackListNumber--;
                 GameManager.Instance.globalCollectedStack -= other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber;
-                GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
-          
+                GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack / 20);
+                OnStackTakeShader(-other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber);
+
             }
 
             if (other.gameObject.GetComponent<GateMechanicsEditor>().isNegative == false && GameManager.Instance.globalCollectedStack==0)
@@ -239,21 +248,22 @@ public class PlayerController : MonoBehaviour
                 OnParticlePlay(gatePositiveParticleIndex);
                 stackList[currentStackListNumber].SetActive(true);
                 GameManager.Instance.globalCollectedStack += other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber;
-                GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
-                
+                GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack / 20);
+                OnStackTakeShader(other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber);
             }
             else if (other.gameObject.GetComponent<GateMechanicsEditor>().isNegative == false && GameManager.Instance.globalCollectedStack > 0 && currentStackListNumber< stackList.Length - 1)
             {
                 OnParticlePlay(gatePositiveParticleIndex);
                 stackList[currentStackListNumber ].SetActive(false);
                 stackList[currentStackListNumber+1].SetActive(true);
-
+                OnStackTakeShader(other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber / 20);
                 currentStackListNumber++;
                 GameManager.Instance.globalCollectedStack += other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber;
                 GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
             }
             else if (other.gameObject.GetComponent<GateMechanicsEditor>().isNegative == false  && currentStackListNumber==stackList.Length-1)
             {
+                OnStackTakeShader(other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber / 20);
                 OnParticlePlay(gatePositiveParticleIndex);
                 GameManager.Instance.globalCollectedStack += other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber;
                 GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
@@ -297,7 +307,17 @@ public class PlayerController : MonoBehaviour
         spoon.transform.DOMove(spoon.transform.position + new Vector3(0, 0, -1), 0.5f, false);
     }
 
-
+    private void OnStackTakeShader(float gatheredCount)
+    {
+       
+       
+            
+        GameManager.Instance.growValue = Mathf.Lerp(GameManager.Instance.growValue, GameManager.Instance.growValue + (gatheredCount), 1);
+      
+        
+        
+        print(GameManager.Instance.growValue);
+    }
    
   
 }

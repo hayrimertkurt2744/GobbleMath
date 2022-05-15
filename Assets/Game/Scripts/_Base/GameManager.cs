@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
     public float horizontalSpeed = 20f;
     public float forwardSpeed = 1f;
     public float playerSmooth=8f;
+    public float growValue=0;
     public int globalCollectedStack = 0;
 
     public Action<int> onStackTake;

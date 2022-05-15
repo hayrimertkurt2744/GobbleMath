@@ -269,5 +269,6 @@ public class LevelManager : MonoBehaviour
             yield return null;
         }
         onLevelRendered?.Invoke();
+        StopAllCoroutines();
     }
 }

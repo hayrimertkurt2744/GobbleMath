@@ -42,26 +42,31 @@ public class CalculateAngle : MonoBehaviour
     private Vector2 directionFive;
 
 
-
-
-    void Update()
+    private void Start()
     {
-        directionMoving = movingTarget.position - transform.position;
-        //directionZero =targetZero.position - transform.position;
         directionOne = targetOne.position - transform.position;
         directionTwo = targetTwo.position - transform.position;
         directionThree = targetThree.position - transform.position;
         directionFour = targetFour.position - transform.position;
         directionFive = targetFive.position - transform.position;
 
-        angle = Vector2.Angle(endPoint, directionMoving);
-
-        //angleZero= angleOne = Vector2.Angle(endPoint, directionOne);
         angleOne = Vector2.Angle(endPoint, directionOne);
         angleTwo = Vector2.Angle(endPoint, directionTwo);
         angleThree = Vector2.Angle(endPoint, directionThree);
         angleFour = Vector2.Angle(endPoint, directionFour);
         angleFive = Vector2.Angle(endPoint, directionFive);
+
+    }
+
+    void Update()
+    {
+        directionMoving = movingTarget.position - transform.position;
+        //directionZero =targetZero.position - transform.position;
+       
+
+        angle = Vector2.Angle(endPoint, directionMoving);
+
+        //angleZero= angleOne = Vector2.Angle(endPoint, directionOne);
         
         if (GameManager.Instance.globalSpeedModifier==0f)
         {
