@@ -22,6 +22,8 @@ public class FinishLine : MonoBehaviour
     public float jumpDuration;
     public float jumpPower;
     private bool snapping = false;
+    private bool onTapTimingFinished = false;
+    private UIManager uiManager;
     public int numOfJumps;
     private int count = 63;
     private int clickCount = 0;
@@ -32,7 +34,16 @@ public class FinishLine : MonoBehaviour
     private CinemachineVirtualCamera vcam2; //last sequence cam
     //[HideInInspector] public bool isLastSequenceStarted = false;
     public ParticleSystem[] finishParticleList;
-   
+    private void OnEnable()
+    {
+        InputManager.Instance.onTouchStart += OnLevelEndingSequence;
+        InputManager.Instance.onTouchMove += OnLevelEndingSequence;
+    }
+    private void OnDisable()
+    {
+        InputManager.Instance.onTouchStart -= OnLevelEndingSequence;
+        InputManager.Instance.onTouchMove -= OnLevelEndingSequence;
+    }
     private void OnTriggerExit(Collider other)
     {
         finishConfetti();
@@ -73,13 +84,21 @@ public class FinishLine : MonoBehaviour
                             //GameManager.Instance.currentState = GameManager.GameState.TapTiming;
 
 
+                            GameManager.onTapTimingEvent?.Invoke();
 
-                                GameManager.onTapTimingEvent?.Invoke();
 
+                            //OnLevelEndingSequence();
+
+                            if (onTapTimingFinished == true)
+                            {
                                 GameManager.Instance.currentState = GameManager.GameState.Victory;
                                 GameManager.onWinEvent?.Invoke();
                                 nextLevelButton.gameObject.SetActive(true);
                                 nextLevelButton.onClick.AddListener(GetNextLevel);
+                                onTapTimingFinished = false;
+                                GameManager.Instance.globalSpeedModifier = 1.1f;
+                            }
+                                
 
 
                            
@@ -122,5 +141,23 @@ public class FinishLine : MonoBehaviour
         }
         LevelManager.Instance.NextLevel();
 
+    }
+    private void OnLevelEndingSequence()
+    {
+       
+       
+            GameManager.Instance.globalSpeedModifier = 0;
+
+            ExecuteAfterTime(2);
+
+        onTapTimingFinished = true;
+
+    }
+    IEnumerator ExecuteAfterTime(float time)
+    {
+        
+        yield return new WaitForSeconds(time);
+        
+        
     }
 }
