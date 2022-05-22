@@ -22,8 +22,11 @@ public class PlayerController : MonoBehaviour
     private float percentageComplete;
     private UIManager uiManager;
     [HideInInspector] public Transform playerTransform;
+    public Material growMaterial;
+    private float gatherCountStarter=0;
+    private float coroutineStop;
 
-    
+
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +34,8 @@ public class PlayerController : MonoBehaviour
         InputManager.Instance.onTouchStart += ProcessPlayerSwerve;
         InputManager.Instance.onTouchMove += ProcessPlayerSwerve;
         stackSpoon = GameManager.Instance.stackSpoon;
-        
+        //growMaterial.SetFloat("Grow_", 0f);
+
 
     }
     private void OnDisable()
@@ -214,7 +218,7 @@ public class PlayerController : MonoBehaviour
                 stackList[currentStackListNumber].SetActive(false);
                 currentStackListNumber--;
                 GameManager.Instance.globalCollectedStack -= other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber;
-                OnStackTakeShader(-other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber/20);
+                OnStackTakeShader(-other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber/70);
                 print("works");
             }
             else if (currentStackListNumber >= 0 && other.gameObject.GetComponent<GateMechanicsEditor>().isNegative == true && GameManager.Instance.globalCollectedStack < other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber)
@@ -225,7 +229,7 @@ public class PlayerController : MonoBehaviour
                 GameManager.Instance.globalCollectedStack -= other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber;
                 GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
                 GameManager.Instance.currentState = GameManager.GameState.Failed;
-                OnStackTakeShader(-other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber / 20);
+                OnStackTakeShader(-other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber /70);
                 print("works");
 
                 LoseTheGame();
@@ -238,7 +242,7 @@ public class PlayerController : MonoBehaviour
                 stackList[currentStackListNumber-1].SetActive(true);
                 currentStackListNumber--;
                 GameManager.Instance.globalCollectedStack -= other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber;
-                GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack / 20);
+                GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack / 70);
                 OnStackTakeShader(-other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber);
 
             }
@@ -248,7 +252,7 @@ public class PlayerController : MonoBehaviour
                 OnParticlePlay(gatePositiveParticleIndex);
                 stackList[currentStackListNumber].SetActive(true);
                 GameManager.Instance.globalCollectedStack += other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber;
-                GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack / 20);
+                GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack / 70);
                 OnStackTakeShader(other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber);
             }
             else if (other.gameObject.GetComponent<GateMechanicsEditor>().isNegative == false && GameManager.Instance.globalCollectedStack > 0 && currentStackListNumber< stackList.Length - 1)
@@ -256,14 +260,14 @@ public class PlayerController : MonoBehaviour
                 OnParticlePlay(gatePositiveParticleIndex);
                 stackList[currentStackListNumber ].SetActive(false);
                 stackList[currentStackListNumber+1].SetActive(true);
-                OnStackTakeShader(other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber / 20);
+                OnStackTakeShader(other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber /70);
                 currentStackListNumber++;
                 GameManager.Instance.globalCollectedStack += other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber;
                 GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
             }
             else if (other.gameObject.GetComponent<GateMechanicsEditor>().isNegative == false  && currentStackListNumber==stackList.Length-1)
             {
-                OnStackTakeShader(other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber / 20);
+                OnStackTakeShader(other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber / 70);
                 OnParticlePlay(gatePositiveParticleIndex);
                 GameManager.Instance.globalCollectedStack += other.gameObject.GetComponent<GateMechanicsEditor>().gateNumber;
                 GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
@@ -309,14 +313,22 @@ public class PlayerController : MonoBehaviour
 
     private void OnStackTakeShader(float gatheredCount)
     {
-       
-       
-            
-        GameManager.Instance.growValue = Mathf.Lerp(GameManager.Instance.growValue, GameManager.Instance.growValue + (gatheredCount), 1);
-      
-        
-        
-        print(GameManager.Instance.growValue);
+        float current = growMaterial.GetFloat("Grow_");
+        coroutineStop = current - 0.2f;
+        StartCoroutine(IncreaseFood(current));
+     
+        print("this works");
+    }
+    IEnumerator IncreaseFood(float current)
+    {
+        growMaterial.SetFloat("Grow_", current);
+        yield return new WaitForSeconds(0.001f);
+        StartCoroutine(IncreaseFood(current - 0.0075f));
+        if (current<=coroutineStop)
+        {
+            StopAllCoroutines();
+        }
+
     }
    
   

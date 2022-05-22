@@ -12,6 +12,7 @@ public class FinishLine : MonoBehaviour
     public Button nextLevelButton;
     private PlayerController playerController;
     public GameObject tapTimingBar;
+    public Animator anim;
     
     
 
@@ -27,13 +28,16 @@ public class FinishLine : MonoBehaviour
     public int numOfJumps;
     private int count = 63;
     private int clickCount = 0;
-   
+
+    
+
     [SerializeField]
     private CinemachineVirtualCamera vcam1;
     [SerializeField]
     private CinemachineVirtualCamera vcam2; //last sequence cam
     //[HideInInspector] public bool isLastSequenceStarted = false;
     public ParticleSystem[] finishParticleList;
+    
     private void OnEnable()
     {
         InputManager.Instance.onTouchStart += OnLevelEndingSequence;
@@ -57,35 +61,40 @@ public class FinishLine : MonoBehaviour
                 spoon.transform.DORotate(new Vector3(0, 180, 0), 1f, RotateMode.FastBeyond360).OnComplete(() =>
                 {
 
-                    spoon.transform.DORotate(new Vector3(-75, 180, 0), 0.3f, RotateMode.FastBeyond360).OnComplete(() =>
+                    anim.SetBool("throw", true);
+
+                    
+
+
+
+                    
+                            
+                        spoon.transform.DORotate(new Vector3(0, 0, 0), 1f, RotateMode.LocalAxisAdd);
+
+                    foreach (GameObject gameObject in objectToThrow)
                     {
-                        foreach (GameObject gameObject in objectToThrow)
-                        {
-                            gameObject.SetActive(true);
-                        }
+                        gameObject.SetActive(true);
+                    }
 
-                        objectToThrow[0].gameObject.transform.DOJump(endPoint[0], jumpPower, numOfJumps, jumpDuration, snapping);
-                        objectToThrow[1].gameObject.transform.DOJump(endPoint[1], jumpPower, numOfJumps, jumpDuration, snapping);
-                        objectToThrow[2].gameObject.transform.DOJump(endPoint[2], jumpPower, numOfJumps, jumpDuration, snapping);
-                        objectToThrow[3].gameObject.transform.DOJump(endPoint[3], jumpPower, numOfJumps, jumpDuration, snapping);
-                        objectToThrow[4].gameObject.transform.DOJump(endPoint[4], jumpPower, numOfJumps, jumpDuration, snapping);
+                    objectToThrow[0].gameObject.transform.DOJump(endPoint[0], jumpPower, numOfJumps, jumpDuration, snapping);
+                    objectToThrow[1].gameObject.transform.DOJump(endPoint[1], jumpPower, numOfJumps, jumpDuration, snapping);
+                    objectToThrow[2].gameObject.transform.DOJump(endPoint[2], jumpPower, numOfJumps, jumpDuration, snapping);
+                    objectToThrow[3].gameObject.transform.DOJump(endPoint[3], jumpPower, numOfJumps, jumpDuration, snapping);
+                    objectToThrow[4].gameObject.transform.DOJump(endPoint[4], jumpPower, numOfJumps, jumpDuration, snapping);
 
 
-                        objectToThrow[5].gameObject.transform.DOJump(endPoint[5], jumpPower, numOfJumps, jumpDuration, snapping).OnComplete(() =>
-                        {
+                    objectToThrow[5].gameObject.transform.DOJump(endPoint[5], jumpPower, numOfJumps, jumpDuration, snapping).OnComplete(() =>
+                    {
                         foreach (GameObject gameObject in objectToThrow)
                         {
                             gameObject.transform.parent = null;
                         }
-
-                        spoon.transform.DORotate(new Vector3(75, 0, 0), 1f, RotateMode.LocalAxisAdd);
-
                         clickCount++;
-                            //GameManager.Instance.currentState = GameManager.GameState.TapTiming;
+                        //GameManager.Instance.currentState = GameManager.GameState.TapTiming;
 
-
+                            GameManager.Instance.isTapTimingStarted = true;
                             GameManager.onTapTimingEvent?.Invoke();
-
+                            anim.SetBool("throw", false);
 
                             //OnLevelEndingSequence();
 
@@ -103,7 +112,7 @@ public class FinishLine : MonoBehaviour
 
                            
                         });
-                    });
+                    
                 });
             });
             

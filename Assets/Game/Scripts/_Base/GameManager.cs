@@ -61,6 +61,7 @@ public class GameManager : MonoBehaviour
     public float playerSmooth=8f;
     public float growValue=0;
     public int globalCollectedStack = 0;
+    [HideInInspector]public bool isTapTimingStarted = false;
 
     public Action<int> onStackTake;
 

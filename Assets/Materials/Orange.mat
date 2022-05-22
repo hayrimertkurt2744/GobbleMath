@@ -9,8 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Orange
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
+  m_ShaderKeywords: _EMISSION _RECEIVE_SHADOWS_OFF _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 2000
@@ -91,7 +91,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _Metallic: 0
+    - _Metallic: 0.848
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
@@ -100,14 +100,14 @@ Material:
     - _RampSmoothOtherLights: 0.5
     - _RampThreshold: 0.5
     - _RampThresholdOtherLights: 0.5
-    - _ReceiveShadows: 1
+    - _ReceiveShadows: 0
     - _RimMax: 1
     - _RimMin: 0.5
     - _Shadow_HSV_H: 0
     - _Shadow_HSV_S: 0
     - _Shadow_HSV_V: 0
     - _Smoothness: 0.2
-    - _SmoothnessTextureChannel: 0
+    - _SmoothnessTextureChannel: 1
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Surface: 0
@@ -116,9 +116,9 @@ Material:
     - _ZWrite: 1
     - __dummy__: 0
     m_Colors:
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 1, g: 0.582752, b: 0, a: 1}
     - _Color: {r: 1, g: 0.40448415, b: 0, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EmissionColor: {r: 0.9339623, g: 0, b: 0.03813158, a: 1}
     - _HColor: {r: 0.9245283, g: 0.6948499, b: 0.5800107, a: 1}
     - _RimColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.6}
     - _SColor: {r: 0.7924528, g: 0.2987142, b: 0.16073336, a: 1}

@@ -18,14 +18,14 @@ public class GrowShaderController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameManager.Instance.growValue = growMaterial.GetFloat("Grow_");
+       // GameManager.Instance.growValue = growMaterial.GetFloat("Grow_");
     }
 
     // Update is called once per frame
     void Update()
     {
         //StartCoroutine(GrowVines(growMaterial));
-        growMaterial.SetFloat("Grow_", GameManager.Instance.growValue);
+       // growMaterial.SetFloat("Grow_", GameManager.Instance.growValue);
         
     }
 

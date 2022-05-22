@@ -68,34 +68,46 @@ public class CalculateAngle : MonoBehaviour
 
         //angleZero= angleOne = Vector2.Angle(endPoint, directionOne);
         
-        if (GameManager.Instance.globalSpeedModifier==0f)
+        if (GameManager.Instance.globalSpeedModifier==0f && GameManager.Instance.isTapTimingStarted==true)
         {
             if (0<= angle && angle<= angleFive)
             {
                 print("x2");
+                StackMultiplier(2);
             }
             else if (angleFive < angle && angle <= angleFour)
             {
                 print("x3");
+                StackMultiplier(3);
             }
             else if (angleFour < angle && angle <= angleThree)
             {
                 print("x5");
+                StackMultiplier(5);
             }
             else if (angleThree < angle && angle <= angleTwo)
             {
                 print("x3");
+                StackMultiplier(4);
             }
             else if (angleTwo < angle && angle <= angleOne)
             {
                 print("x2");
+                StackMultiplier(2);
             }
             else if (angleOne<angle)
             {
                 print("x2");
+                StackMultiplier(2);
             }
         }
        
         
+    }
+    private void StackMultiplier(int a)
+    {
+        GameManager.Instance.globalCollectedStack *= a;
+        GameManager.Instance.onStackTake(GameManager.Instance.globalCollectedStack);
+        GameManager.Instance.isTapTimingStarted = false;
     }
 }
